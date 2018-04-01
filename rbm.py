@@ -33,9 +33,10 @@ def getInitialWeights(m, F, K):
 
 def sig(x):
     ### TO IMPLEMENT ###
+    sig=1/(1+np.exp(-x))
     # x is a real vector of size n
     # ret should be a vector of size n where ret_i = sigmoid(x_i)
-    return None
+    return sig
 
 def visibleToHiddenVec(v, w):
     ### TO IMPLEMENT ###
@@ -43,7 +44,14 @@ def visibleToHiddenVec(v, w):
     #    OR a probability distribution over the rating
     # w is a list of matrices of size m x F x 5
     # ret should be a vector of size F
-    return None
+    result=np.zeros(w.shape[1])
+    for k in range(v.shape[1]):
+        w_k=w[:,:,k]
+        v_k=[:,k]
+        result+=np.dot(v_k,w_k.transpose())
+    result=sig(result)
+    return result
+    
 
 def hiddenToVisible(h, w):
     ### TO IMPLEMENT ###
