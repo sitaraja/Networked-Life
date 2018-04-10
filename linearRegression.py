@@ -57,16 +57,32 @@ def predict(movies, users, rBar, b):
         p[i] = rating
     return p
 
+def predictForUser(user, rBar, b):
+    ### TO IMPLEMENT
+    # given a user ID, predicts all movie ratings for the user
+    users = np.array([user] * trStats["n_movies"])
+    p = predict(trStats["movies"], users, rBar, b)
+    return p
+
 # Unregularised version (<=> regularised version with l = 0)
 # b = param(A, c)
 
 # Regularised version
-l = 1
+l = 2.5
 b = param_reg(A, c, l)
 
-print "Linear regression, l = %f" % l
-print "RMSE for training %f" % lib.rmse(predict(trStats["movies"], trStats["users"], rBar, b), trStats["ratings"])
-print "RMSE for validation %f" % lib.rmse(predict(vlStats["movies"], vlStats["users"], rBar, b), vlStats["ratings"])
+print("Linear regression, l = %f" % l)
+print("RMSE for training %f" % lib.rmse(predict(trStats["movies"], trStats["users"], rBar, b), trStats["ratings"]))
+print("RMSE for validation %f" % lib.rmse(predict(vlStats["movies"], vlStats["users"], rBar, b), vlStats["ratings"]))
 # Linear regression, l =1.0
 # RMSE for training 0.847741
 # RMSE for validation 1.060366
+
+# Based on tesst data provided
+# Linear regression, l =2.5
+# RMSE for training 0.900981
+# RMSE for validation 1.004712
+
+predictedRatings = np.array([predictForUser(user, rBar, b) for user in trStats["u_users"]])
+print("Size of predictedRatings = %s" % (predictedRatings.shape,))
+np.savetxt("networkedlifeproj+v2.txt", predictedRatings)
