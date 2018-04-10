@@ -63,7 +63,12 @@ def hiddenToVisible(h, w):
     #   has not rated! (where reconstructing means getting a distribution
     #   over possible ratings).
     #   We only do so when we predict the rating a user would have given to a movie.
-    return None
+    v=[]
+    #The shape attribute for numpy arrays returns the dimensions of the array.
+    n=w.shape[0]
+    for i in range(n):
+    	v.append(softmax(np.tensordot(h,w[i, :, :], axes=1)))
+    return np.array(v)
 
 def probProduct(v, p):
     # v is a matrix of size m x 5
@@ -99,7 +104,17 @@ def getPredictedDistribution(v, w, wq):
     #   - Backpropagate these hidden states to obtain
     #       the distribution over the movie whose associated weights are wq
     # ret is a vector of size 5
-    return None
+    
+    #visible input to hidden units
+    vistoHid=visibleToHiddenVec(v,w)
+    #sampling hidden distributions
+    sample=sample(vistoHid)
+    wq = np.array([wq])
+    #backpropogate
+    negData = hiddenToVisible(sample, wq) # 1 x 5
+    return negData[0]
+
+
 
 def predictRatingMax(ratingDistribution):
     ### TO IMPLEMENT ###
