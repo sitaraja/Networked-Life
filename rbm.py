@@ -123,7 +123,9 @@ def predictRatingMax(ratingDistribution):
     # This function is one of three you are to implement
     # that returns a rating from the distribution
     # We decide here that the predicted rating will be the one with the highest probability
-    return None
+    maxRating=max(ratingDistribution)
+    maxRatingindex=ratingDistribution.index(maxRating)
+    return maxRatingindex+1
 
 def predictRatingMean(ratingDistribution):
     ### TO IMPLEMENT ###
@@ -142,7 +144,9 @@ def predictRatingExp(ratingDistribution):
     # that returns a rating from the distribution
     # We decide here that the predicted rating will be the expectation over
     # the softmax applied to ratingDistribution
-    return None
+    ratings=np.array([1,2,3,4,5])
+    n = np.dot(ratings, ratingDistribution)
+    return n
 
 def predictMovieForUser(q, user, W, training, predictType="exp"):
     # movie is movie idx
