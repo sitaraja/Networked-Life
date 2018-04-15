@@ -134,7 +134,12 @@ def predictRatingMean(ratingDistribution):
     # This function is one of three you are to implement
     # that returns a rating from the distribution
     # We decide here that the predicted rating will be the expectation over ratingDistribution
-    return None
+    max_prob=np.max(ratingDistribution)
+    #Return indices that are non-zero in the flattened version of a
+    max_prob = np.max(ratingDistribution)
+    likely_ratings = np.flatnonzero(ratingDistribution == max_prob)
+    rating = np.median(likely_ratings)
+    return rating
 
 def predictRatingExp(ratingDistribution):
     ### TO IMPLEMENT ###
@@ -170,4 +175,8 @@ def predict(movies, users, W, training, predictType="exp"):
 def predictForUser(user, W, training, predictType="exp"):
     ### TO IMPLEMENT
     # given a user ID, predicts all movie ratings for the user
-    return None
+    trainingStats = lib.getUsefulStats(training)
+    user_ratings = []
+    for movie in trainingStats:
+    	user_ratings.append(predictMovieForUser(movie,user,W,training,predictType))
+    return np.array(user_ratings)
