@@ -44,11 +44,12 @@ def visibleToHiddenVec(v, w):
     #    OR a probability distribution over the rating
     # w is a list of matrices of size m x F x 5
     # ret should be a vector of size F
+    
     result=np.zeros(w.shape[1])
     for k in range(K):
         w_k=w[:,:,k]
         v_k=v[:,k]
-        result+=np.dot(w_k.transpose(),v_k)
+        result+=np.dot(v_k,w_k)
     result=sig(result)
     return result
     
@@ -109,9 +110,9 @@ def getPredictedDistribution(v, w, wq):
     vistoHid=visibleToHiddenVec(v,w)
     #sampling hidden distributions
     Hiddensample=sample(vistoHid)
-    wq = np.array([wq])
+    wq_array = np.array([wq])
     #backpropogate
-    negData = hiddenToVisible(Hiddensample, wq) # 1 x 5
+    negData = hiddenToVisible(Hiddensample, wq_array) # 1 x 5
     return negData[0]
 
 
@@ -134,12 +135,9 @@ def predictRatingMean(ratingDistribution):
     # This function is one of three you are to implement
     # that returns a rating from the distribution
     # We decide here that the predicted rating will be the expectation over ratingDistribution
-    max_prob=np.max(ratingDistribution)
     #Return indices that are non-zero in the flattened version of a
-    max_prob = np.max(ratingDistribution)
-    likely_ratings = np.flatnonzero(ratingDistribution == max_prob)
-    rating = np.median(likely_ratings)
-    return rating
+    rating = np.median(ratingDistribution)
+    return rating+1
 
 def predictRatingExp(ratingDistribution):
     ### TO IMPLEMENT ###
