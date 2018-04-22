@@ -16,16 +16,15 @@ K = 5
 
 # SET PARAMETERS HERE!!!
 # number of hidden units
-# F = 11
 F = 10
 rmse = []
 epochs = 40
 gradientLearningRate = 0.1
 # for regularization
 # still finetuning param
-# ld = 0.15
+ld = 0.00001
 mu = 0.95
-alpha = 0.05
+alpha = 0.25
 
 # Initialise all our arrays
 
@@ -42,14 +41,14 @@ for epoch in range(1, epochs):
         # Adaptive Learning Rates
         # Adjust learning rate such that it decreases with
         # num of epochs
-        # adaptive_rate = alpha / math.sqrt(epoch)
+        adaptive_rate = alpha / math.sqrt(epoch)
         ###############################################
 
         ###############################################
         # Nestorov Momentum - stores previous gradient
         # Resets current gradient after each epoch
-        # prev_grad = grad
-        # grad = np.zeros(W.shape)
+        prev_grad = grad
+        grad = np.zeros(W.shape)
         ###############################################
         for user in visitingOrder:
                 # get the ratings of that user
@@ -86,9 +85,9 @@ for epoch in range(1, epochs):
                 # Adaptive learning rate Implementation
                 # grad += adaptive_rate * (posprods - negprods)
                 ###############################################
-                #REGULARIZATION#
-                #Not working yet#
-                # grad += gradientLearningRate * ((posprods - negprods) - (ld*W*0.5))
+                # REGULARIZATION
+                # grad += adaptive_rate * ((posprods - negprods) - (ld*W))
+                ###############################################
                 
                 # without momentum
                 W += grad
@@ -124,7 +123,7 @@ x = np.arange(1,epochs)
 y = np.asarray(rmse)
 # Find min RMSE and at which epoch
 print("### MIN RMSE = %f ###" % y[np.argmin(y)])
-print("### AT EPOCH NUM = %d ###" % np.argmin(y)+1)
+print("### AT EPOCH NUM %d ###" % int(np.argmin(y)+1))
 plt.plot(x,y)
 plt.show()
 
